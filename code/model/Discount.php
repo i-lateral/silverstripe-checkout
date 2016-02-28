@@ -102,17 +102,17 @@ class Discount extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
-    
+
     public function canCreate($member = null)
     {
         $extended = $this->extendedCan('canCreate', $member);
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 
@@ -122,7 +122,7 @@ class Discount extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 
@@ -132,7 +132,7 @@ class Discount extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 }

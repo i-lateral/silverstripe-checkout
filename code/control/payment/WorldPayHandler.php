@@ -6,11 +6,11 @@ class WorldPayHandler extends PaymentHandler
     public function index($request)
     {
         $this->extend('onBeforeIndex');
-        
+
         // Setup payment gateway form
         $order = $this->getOrderData();
         $cart = ShoppingCart::get();
-        
+
         // Setup the gateway URL
         if (Director::isDev()) {
             $gateway_url = "https://secure-test.worldpay.com/wcc/purchase";
@@ -55,15 +55,15 @@ class WorldPayHandler extends PaymentHandler
 
         // Create a string of items ordered (to manage the order via WorldPay)
         $desc_string = "";
-        
+
         foreach ($cart->getItems() as $item) {
             $desc_string .= $item->Title . ' x ' . $item->Quantity . ', ';
         }
-        
+
         if (!Checkout::config()->simple_checkout && !$cart->isCollection()) {
             // Add postage type to description
             $desc_string .= _t("Checkout.Postage", "Postage") . ': ' . $order->PostageType . '; ';
-            
+
             // Add postage address to description
             $desc_string .= _t("Checkout.PostTo", "Post to") . ': ';
             $desc_string .= $order->DeliveryFirstnames . " " . $order->DeliverySurname . ', ';
@@ -92,16 +92,16 @@ class WorldPayHandler extends PaymentHandler
             ->addExtraClass('forms')
             ->setFormMethod('POST')
             ->setFormAction($gateway_url);
-        
+
         $this->customise(array(
             "Title"     => _t('Checkout.Summary', "Summary"),
             "MetaTitle" => _t('Checkout.Summary', "Summary"),
             "Form"      => $form,
             "Order"     => $order
         ));
-        
+
         $this->extend("onAfterIndex");
-        
+
         return $this->renderWith(array(
             "Worldpay",
             "Payment",
@@ -116,7 +116,7 @@ class WorldPayHandler extends PaymentHandler
     public function callback($request)
     {
         $this->extend('onBeforeCallback');
-        
+
         $data = $this->request->postVars();
         $status = "error";
         $order_id = 0;
@@ -144,7 +144,7 @@ class WorldPayHandler extends PaymentHandler
             $order_id = $data['cartId'];
             $payment_id = $data['transId'];
             $status = $data['transStatus'];
-            
+
             $success_url = Controller::join_links(
                 Director::absoluteBaseURL(),
                 Payment_Controller::config()->url_segment,
@@ -161,7 +161,7 @@ class WorldPayHandler extends PaymentHandler
         } else {
             return $this->httpError(500);
         }
-        
+
         $payment_data = ArrayData::array_to_object(array(
             "OrderID" => $order_id,
             "PaymentProvider" => "WorldPay",
@@ -169,13 +169,13 @@ class WorldPayHandler extends PaymentHandler
             "Status" => $status,
             "GatewayData" => $data
         ));
-        
+
         $this
             ->setPaymentData($payment_data)
             ->customise($vars);
-        
+
         $this->extend('onAfterCallback');
-        
+
         return $this->renderWith(array("Worldpay_callback"));
     }
 }

@@ -7,12 +7,12 @@
  */
 abstract class PaymentHandler extends Controller
 {
-    
+
     private static $allowed_actions = array(
         "index",
         "callback"
     );
-    
+
     /**
      * Set up the "restful" URLs
      *
@@ -22,7 +22,7 @@ abstract class PaymentHandler extends Controller
     private static $url_handlers = array(
         '$Action/$ID' => 'handleAction',
     );
-    
+
     /**
      * The current payment gateway we are using
      *
@@ -59,16 +59,16 @@ abstract class PaymentHandler extends Controller
         $this->order_data = $data;
         return $this;
     }
-    
-    
+
+
     /**
      * An object of the current payment data. This can be tapped into
      * via extensions to find out what the gateway returned and then
      * used to update orders.
-     * 
+     *
      * The standard format is to return an object with the folowing
      * paramaters set:
-     * 
+     *
      *   -  OrderID (ID of the order just completed)
      *   -  PaymentID (The ID of the payment at the gateway)
      *   -  Status (status of the payment)
@@ -88,23 +88,23 @@ abstract class PaymentHandler extends Controller
         $this->payment_data = $data;
         return $this;
     }
-    
+
     public function handleRequest(SS_HTTPRequest $request, DataModel $model)
     {
         if (!$request) {
             user_error("Controller::handleRequest() not passed a request!", E_USER_ERROR);
         }
-        
+
         $this->urlParams = $request->allParams();
         $this->request = $request;
         $this->response = new SS_HTTPResponse();
         $this->setDataModel($model);
-        
+
         // If we had a redirection or something, halt processing.
         if ($this->response->isFinished()) {
             return $this->response;
         }
-        
+
         // Find our action or set to index if not found
         $action = $this->request->param("Action");
         if (!$action) {
@@ -125,7 +125,7 @@ abstract class PaymentHandler extends Controller
      *
      * This action should return a rendered response that will then be
      * directly reterned by the payment controller.
-     * 
+     *
      * @param $request Current request object
      */
     abstract public function index($request);
@@ -137,7 +137,7 @@ abstract class PaymentHandler extends Controller
      * This action is called directly from the payment controller and
      * should return either a rendered template or a response (such as a
      * redirect).
-     * 
+     *
      * @param $request Current request object
      */
     abstract public function callback($request);

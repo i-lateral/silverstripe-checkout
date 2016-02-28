@@ -27,7 +27,7 @@ $SessionMessage
                             $DiscountForm
                         <% end_if %>
                     </div>
-                    
+
                     <hr/>
                 <% end_if %>
 
@@ -37,7 +37,7 @@ $SessionMessage
                             <h3>
                                 <%t Checkout.ReceiveGoods "How would you like to receive your goods?" %>
                             </h3>
-                            
+
                             <div class="checkout-delivery-buttons">
                                 <a class="btn <% if not isCollection %>btn-active<% end_if %> width-100" href="{$Link(setdeliverytype)}/deliver">
                                     <%t Checkout.Delivered "Delivered" %>
@@ -49,7 +49,7 @@ $SessionMessage
                             </div>
                         </div>
                     <% end_if %>
-                    
+
                     <% if $PostageForm && not $isCollection %>
                         <div class="unit-50 size10f2 col-xs-12 col-sm-6 checkout-cart-postage">
                             $PostageForm
@@ -72,7 +72,7 @@ $SessionMessage
                             {$SubTotalCost.Nice}
                         </td>
                     </tr>
-                    
+
                     <% if $Discount %>
                         <tr class="discount">
                             <td class="text-right">
@@ -98,7 +98,7 @@ $SessionMessage
                             </td>
                         </tr>
                     <% end_if %>
-                    
+
                     <% if $ShowTax %>
                         <tr class="tax">
                             <td class="text-right">
@@ -111,7 +111,7 @@ $SessionMessage
                             </td>
                         </tr>
                     <% end_if %>
-                    
+
                     <tr class="total">
                         <td class="text-right">
                             <strong class="uppercase bold">
@@ -123,7 +123,7 @@ $SessionMessage
                         </td>
                     </tr>
                 </table>
-                
+
                 <p class="checkout-cart-proceed line units-row end">
                     <a href="{$BaseHref}checkout/checkout" class="btn btn-green btn-big">
                         <%t Checkout.CartProceed 'Proceed to Checkout' %>

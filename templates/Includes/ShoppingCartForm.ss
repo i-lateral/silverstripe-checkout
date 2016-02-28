@@ -30,7 +30,7 @@
                                 <% if $FindStockItem %><a href="{$FindStockItem.Link}">$Title</a>
                                 <% else %>$Title<% end_if %>
                             </strong><br/>
-                            <% if $Content %>$Content.Summary(10)<br/><% end_if %>                            
+                            <% if $Content %>$Content.Summary(10)<br/><% end_if %>
                             <% if $Customisations && $Customisations.exists %><div class="small">
                                 <% loop $Customisations %><div class="{$ClassName}">
                                     <strong>{$Title}:</strong> {$Value}
@@ -59,7 +59,7 @@
         <a href="$Controller.Link('emptycart')" class="btn btn-red">
             <%t Checkout.CartEmpty "Empty Cart" %>
         </a>
-        
+
         $Actions.dataFieldByName(action_doUpdate)
     </fieldset>
 </form>

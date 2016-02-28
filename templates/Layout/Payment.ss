@@ -35,7 +35,7 @@
     <% end_with %>
 
     <hr/>
-    
+
     <% with $Order %>
         <div class="checkout-payment-summary units-row row line">
             <div class="unit-50 unit size1of2 col-xs-12 col-sm-6">

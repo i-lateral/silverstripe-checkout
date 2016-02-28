@@ -25,7 +25,7 @@ class MemberAddress extends DataObject
     public static $has_one = array(
         "Owner" => "Member"
     );
-    
+
     public static $summary_fields = array(
         "FirstName",
         "Surname",
@@ -68,7 +68,7 @@ class MemberAddress extends DataObject
         if (!$member) {
             $member = Member::currentUser();
         }
-        
+
         $extended = $this->extendedCan('canView', $member);
         if ($extended !== null) {
             return $extended;
@@ -93,12 +93,12 @@ class MemberAddress extends DataObject
         if (!$member) {
             $member = Member::currentUser();
         }
-        
+
         $extended = $this->extendedCan('canEdit', $member);
         if ($extended !== null) {
             return $extended;
         }
-        
+
         if ($member && $this->OwnerID == $member->ID) {
             return true;
         } elseif ($member && Permission::checkMember($member->ID, array("ADMIN"))) {
@@ -118,7 +118,7 @@ class MemberAddress extends DataObject
         if (!$member) {
             $member = Member::currentUser();
         }
-        
+
         $extended = $this->extendedCan('canDelete', $member);
         if ($extended !== null) {
             return $extended;

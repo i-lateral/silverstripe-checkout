@@ -11,9 +11,9 @@ class Checkout_Controller extends Controller
 
     /**
      * URL Used to generate links to this controller.
-     * 
-     * NOTE If you alter routes.yml, you MUST alter this. 
-     * 
+     *
+     * NOTE If you alter routes.yml, you MUST alter this.
+     *
      * @var string
      * @config
      */
@@ -27,7 +27,7 @@ class Checkout_Controller extends Controller
      * @config
      */
     private static $class_name = "Checkout";
-    
+
 
     private static $allowed_actions = array(
         "billing",
@@ -44,11 +44,11 @@ class Checkout_Controller extends Controller
     {
         return self::config()->class_name;
     }
-    
-        
+
+
     /**
      * Get the link to this controller
-     * 
+     *
      * @return string
      */
     public function Link($action = null)
@@ -81,7 +81,7 @@ class Checkout_Controller extends Controller
         if (Checkout::config()->simple_checkout) {
             return $this->redirect($this->Link('finish'));
         }
-        
+
         // If we have turned off login, or member logged in
         if (!(Checkout::config()->login_form) || Member::currentUserID()) {
             return $this->redirect($this->Link('billing'));
@@ -110,12 +110,12 @@ class Checkout_Controller extends Controller
     public function billing()
     {
         $form = $this->BillingForm();
-        
+
         // If we are using simple checkout, skip
         if (Checkout::config()->simple_checkout) {
             return $this->redirect($this->Link('finish'));
         }
-            
+
         // Check permissions for guest checkout
         if (!Member::currentUserID() && !Checkout::config()->guest_checkout) {
             return $this->redirect($this->Link('index'));
@@ -153,17 +153,17 @@ class Checkout_Controller extends Controller
         if (Checkout::config()->simple_checkout) {
             return $this->redirect($this->Link('finish'));
         }
-            
+
         // If customer is collecting, skip
         if (ShoppingCart::get()->isCollection()) {
             return $this->redirect($this->Link('finish'));
         }
-        
+
         // Check permissions for guest checkout
         if (!Member::currentUserID() && !Checkout::config()->guest_checkout) {
             return $this->redirect($this->Link('index'));
         }
-        
+
         $this->customise(array(
             'Title'     => _t('Checkout.DeliveryDetails', "Delivery Details"),
             'Form'      => $this->DeliveryForm()
@@ -262,12 +262,12 @@ class Checkout_Controller extends Controller
         if (!Checkout::config()->simple_checkout && !is_array($billing_data) && !is_array($delivery_data)) {
             return $this->redirect($this->Link('index'));
         }
-        
+
         // Check permissions for guest checkout
         if (!Member::currentUserID() && !Checkout::config()->guest_checkout) {
             return $this->redirect($this->Link('index'));
         }
-            
+
         if (Checkout::config()->simple_checkout) {
             $title = _t('Checkout.SelectPaymentMethod', "Select Payment Method");
         } else {
@@ -327,7 +327,7 @@ class Checkout_Controller extends Controller
         } elseif($member = Member::currentUser()) {
             // Fill email, phone, etc
             $form->loadDataFrom($member);
-            
+
             // Then fill with Address info
             if($member->DefaultAddress()) {
                 $form->loadDataFrom($member->DefaultAddress());

@@ -6,7 +6,7 @@
  */
 class PostagePaymentForm extends Form
 {
-    
+
     public function __construct($controller, $name = "PostagePaymentForm")
     {
         if (!Checkout::config()->simple_checkout && !ShoppingCart::get()->isCollection()) {
@@ -15,13 +15,13 @@ class PostagePaymentForm extends Form
             $country = $delivery_data['DeliveryCountry'];
             $postcode = $delivery_data['DeliveryPostCode'];
             $cart = ShoppingCart::get();
-            
+
             $postage_areas = new ShippingCalculator($postcode, $country);
             $postage_areas
                 ->setCost($cart->SubTotalCost)
                 ->setWeight($cart->TotalWeight)
                 ->setItems($cart->TotalItems);
-                
+
             $postage_areas = $postage_areas->getPostageAreas();
 
             // Loop through all postage areas and generate a new list
@@ -75,7 +75,7 @@ class PostagePaymentForm extends Form
 
         // Get available payment methods and setup payment
         $payment_methods = ArrayList::create();
-        
+
         foreach (SiteConfig::current_site_config()->PaymentMethods() as $payment_method) {
             if ($payment_method->canView()) {
                 $payment_methods->add($payment_method);
@@ -126,13 +126,13 @@ class PostagePaymentForm extends Form
         ));
 
         parent::__construct($controller, $name, $fields, $actions, $validator);
-        
+
         $this->setTemplate($this->ClassName);
     }
-    
+
     public function getBackURL() {
         return $this->controller->Link("billing");
-    } 
+    }
 
     public function doContinue($data)
     {

@@ -75,10 +75,10 @@ class DeliveryDetailsForm extends Form
         );
 
         parent::__construct($controller, $name, $fields, $actions, $validator);
-        
+
         $this->setTemplate($this->ClassName);
     }
-    
+
     public function getBackURL()
     {
         return $this->controller->Link();

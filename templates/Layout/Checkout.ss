@@ -7,7 +7,7 @@
         <div class="unit-50 unit size1of2 col-xs-12 col-sm-6">
             $LoginForm
         </div>
-        
+
         <div class="unit-50 unit size1of2 col-xs-12 col-sm-6">
             <p class="units-row line">
                 <%t Checkout.DontHaveAccount "Don't have an account?" %>
