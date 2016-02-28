@@ -63,7 +63,7 @@ class BillingDetailsForm extends Form
         }
 
         $actions = FieldList::create();
-        
+
         if(ShoppingCart::get()->isCollection()) {
             $actions->add(
                 FormAction::create('doSetDelivery', _t('Checkout.UseTheseDetails', 'Use these details'))
@@ -74,7 +74,7 @@ class BillingDetailsForm extends Form
                 FormAction::create('doSetDelivery', _t('Checkout.SetDeliveryAddress', 'Deliver to another address'))
                     ->addExtraClass('checkout-action-next')
             );
-            
+
             $actions->add(
                 FormAction::create('doContinue', _t('Checkout.DeliverThisAddress', 'Deliver to this address'))
                     ->addExtraClass('checkout-action-next')
@@ -93,14 +93,14 @@ class BillingDetailsForm extends Form
         );
 
         parent::__construct($controller, $name, $fields, $actions, $validator);
-        
+
         $this->setTemplate($this->ClassName);
     }
-    
+
     public function getShoppingCart() {
         return ShoppingCart::get();
     }
-    
+
     public function getBackURL()
     {
         return Controller::join_links(
@@ -178,7 +178,7 @@ class BillingDetailsForm extends Form
     private function save_address($data)
     {
         $member = Member::currentUser();
-        
+
         // If the user ticked "save address" then add to their account
         if ($member && array_key_exists('SaveAddress', $data) && $data['SaveAddress']) {
             // First save the details to the users account if they aren't set
@@ -188,7 +188,7 @@ class BillingDetailsForm extends Form
             $member->Company = ($member->Company) ? $member->Company : $data['Company'];
             $member->PhoneNumber = ($member->PhoneNumber) ? $member->PhoneNumber : $data['PhoneNumber'];
             $member->write();
-            
+
             $address = MemberAddress::create();
             $address->Company = $data['Company'];
             $address->FirstName = $data['FirstName'];

@@ -19,7 +19,7 @@
         line-height: 1.2em;
         padding: 0 0.5em 0.05em 0.5em;
     }
-    
+
     .checkout-cart .checkout-cart-items .subtotal strong {
         text-align: right;
     }
@@ -48,7 +48,7 @@
         text-align: right;
         padding: 0.5em;
     }
-    
+
     .checkout-cart .checkout-total-table .total td {
         color: #b80000;
         font-size: 1.5em;

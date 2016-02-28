@@ -17,7 +17,7 @@
                     <% if $Tag == 'fieldset' && $Legend %>
                         <legend>$Legend</legend>
                     <% end_if %>
-                    
+
                     <% loop $FieldList %>
                         <% if $Up.ColumnCount %>
                             <div class="column-{$Up.ColumnCount} unit <% if $Up.ColumnCount == 2 %>unit-50 half size1of2 col-sm-6<% else_if $Up.ColumnCount == 3 %>unit-33 third size1of3 col-sm-4<% end_if %> $FirstLast">
@@ -31,7 +31,7 @@
                     <% if $Description %><span class="description">$Description</span><% end_if %>
                 </$Tag>
             <% end_with %>
-            
+
             $Fields.dataFieldByName("SecurityID")
         </div>
 
@@ -44,7 +44,7 @@
                         <%t Checkout.Back 'Back' %>
                     </a>
                 </div>
-                
+
                 <div class="unit-75 col-sm-8 text-right">
                     <% loop $Actions %>
                         <% if $Name == "action_doContinue" %>

@@ -21,7 +21,7 @@ class CheckoutSiteConfigExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        
+
         // Payment Methods
         $payment_table = GridField::create(
             'PaymentMethods',
@@ -53,21 +53,21 @@ class CheckoutSiteConfigExtension extends DataExtension
                     "placeholder",
                     _t("CheckoutAdmin.OrderPrefixPlaceholder", "EG 'abc'")
                 ),
-                
+
                 TextAreaField::create(
                     'PaymentSuccessContent',
                     _t("CheckoutAdmin.PaymentSuccessContent", "Payment successfull content")
                 )->setRows(4)
                 ->setColumns(30)
                 ->addExtraClass('stacked'),
-                
+
                 TextAreaField::create(
                     'PaymentFailerContent',
                     _t("CheckoutAdmin.PaymentFailerContent", "Payment failer content")
                 )->setRows(4)
                 ->setColumns(30)
                 ->addExtraClass('stacked'),
-                
+
                 $payment_table
             )
         );

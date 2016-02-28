@@ -145,7 +145,7 @@ class PaymentMethod extends DataObject implements PermissionProvider
     {
         return $this->URL;
     }
-    
+
     public function providePermissions()
     {
         return array(
@@ -157,24 +157,24 @@ class PaymentMethod extends DataObject implements PermissionProvider
             ),
         );
     }
-    
+
     public function canView($member = null)
     {
         $extended = $this->extendedCan('canView', $member);
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
-    
+
     public function canCreate($member = null)
     {
         $extended = $this->extendedCan('canCreate', $member);
         if ($extended !== null) {
             return $extended;
         }
-        
+
         if ($member instanceof Member) {
             $memberID = $member->ID;
         } elseif (is_numeric($member)) {
@@ -198,7 +198,7 @@ class PaymentMethod extends DataObject implements PermissionProvider
         if ($extended !== null) {
             return $extended;
         }
-        
+
         if ($member instanceof Member) {
             $memberID = $member->ID;
         } elseif (is_numeric($member)) {
@@ -222,7 +222,7 @@ class PaymentMethod extends DataObject implements PermissionProvider
         if ($extended !== null) {
             return $extended;
         }
-        
+
         if ($member instanceof Member) {
             $memberID = $member->ID;
         } elseif (is_numeric($member)) {

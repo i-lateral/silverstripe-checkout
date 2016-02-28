@@ -3,24 +3,24 @@
 /**
  * Shipping calculator is a basic helper class that can be used to query
  * the shipping table.
- * 
+ *
  * At the moment we only output shipping areas based on weight/cost/
  * items and location. Buit this can now be expanded more easily if
  * needed.
- * 
+ *
  * @author ilateral (info@ilateral.co.uk)
  * @package checkout
  */
 class ShippingCalculator extends Object
 {
-    
+
     /**
      * 2 character country code
-     * 
+     *
      * @var string
      */
     private $country_code;
-    
+
     public function setCountryCode($value)
     {
         $this->country_code = $value;
@@ -31,14 +31,14 @@ class ShippingCalculator extends Object
     {
         return $this->country_code;
     }
-    
+
     /**
      * Zip/postal code for the search
-     * 
+     *
      * @var string
      */
     private $zipcode;
-        
+
     public function setZipCode($value)
     {
         $this->zipcode = $value;
@@ -49,14 +49,14 @@ class ShippingCalculator extends Object
     {
         return $this->zipcode;
     }
-    
+
     /**
      * The total cost we will be checking the cart against
-     * 
+     *
      * @var Float
      */
     private $cost = 0.0;
-    
+
     public function setCost($value)
     {
         $this->cost = $value;
@@ -67,14 +67,14 @@ class ShippingCalculator extends Object
     {
         return $this->cost;
     }
-    
+
     /**
      * The total weight to check against
-     * 
+     *
      * @var Float
      */
     private $weight = 0;
-    
+
     public function setWeight($value)
     {
         $this->weight = $value;
@@ -85,14 +85,14 @@ class ShippingCalculator extends Object
     {
         return $this->weight;
     }
-    
+
     /**
      * The total numbers of items to check against
-     * 
+     *
      * @var Float
      */
     private $items = 0;
-    
+
     public function setItems($value)
     {
         $this->items = $value;
@@ -103,14 +103,14 @@ class ShippingCalculator extends Object
     {
         return $this->items;
     }
-    
+
     /**
      * The total numbers of items to check against
-     * 
+     *
      * @var Float
      */
     private $include_wildcards = true;
-    
+
     public function setWildcards($value)
     {
         $this->include_wildcards = $value;
@@ -121,12 +121,12 @@ class ShippingCalculator extends Object
     {
         return $this->include_wildcards;
     }
-    
-    
+
+
     /**
      * Simple constructor that sets the country code and zip. If no
      * country is set, this class attempts to autodetect.
-     * 
+     *
      * @param country_code 2 character country code
      * @param zipcode string of the zipo/postal code
      */
@@ -139,12 +139,12 @@ class ShippingCalculator extends Object
             $locale->setLocale($this->locale());
             $this->country_code = $locale->getRegion();
         }
-        
+
         if ($zipcode) {
             $this->zipcode = $zipcode;
         }
     }
-    
+
     /**
      * Get the locale of the Member, or if we're not logged in or don't have a locale, use the default one
      * @return string
@@ -154,11 +154,11 @@ class ShippingCalculator extends Object
         if (($member = Member::currentUser()) && $member->Locale) {
             return $member->Locale;
         }
-            
+
         return i18n::get_locale();
     }
-    
-    
+
+
     /**
      * Find relevent postage rates, based on supplied:
      * - Country
@@ -166,7 +166,7 @@ class ShippingCalculator extends Object
      * - Weight
      * - Cost
      * - Number of Items
-     * 
+     *
      * This is returned as an ArrayList that can be looped through.
      *
      * @return ArrayList
@@ -178,7 +178,7 @@ class ShippingCalculator extends Object
         $cart = ShoppingCart::get();
         $discount = $cart->getDiscount();
         $filter_zipcode = strtolower(substr($this->zipcode, 0, 2));
-        
+
         if ($this->include_wildcards) {
             $filter = array(
                 "Country:PartialMatch" => array($this->country_code, "*"),
@@ -190,12 +190,12 @@ class ShippingCalculator extends Object
                 "ZipCode:PartialMatch" => $filter_zipcode
             );
         }
-        
+
         // Find any postage areas that match our filter
         $postage_areas = $config
             ->PostageAreas()
             ->filter($filter);
-            
+
         // Check if any discounts are set with free postage
         // This is a little hacky at the moment, need to find a nicer
         // way to add free shipping.
@@ -203,29 +203,29 @@ class ShippingCalculator extends Object
             $postage = Checkout::CreateFreePostageObject();
             $return->add($postage);
         }
-        
+
         // Make sure we don't effect any associations
         foreach ($postage_areas as $item) {
             $return->add($item);
         }
-        
+
         // Before doing anything else, remove any wildcards (if needed)
         $exact_country = false;
-        
-        // Find any countries that are exactly matched 
+
+        // Find any countries that are exactly matched
         foreach ($return as $location) {
             if ($location->Country != "*") {
                 $exact_country = true;
             }
         }
-        
+
         // If exactly matched, remove any wildcards
         foreach ($return as $location) {
             if ($exact_country && $location->Country == "*" && $location->ID != -1) {
                 $return->remove($location);
             }
         }
-        
+
 
         // Now we have a list of locations, start checking for additional
         // rules an remove if not applicable.

@@ -1,7 +1,7 @@
 <?php
 /**
  * Text input field with validation for numeric values.
- * 
+ *
  * @package forms
  * @subpackage fields-formattedinput
  */
@@ -37,7 +37,7 @@ class QuantityField extends NumericField
             return true;
         }
     }
-    
+
     public function dataValue()
     {
         return (is_numeric($this->value)) ? $this->value : 0;

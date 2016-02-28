@@ -20,16 +20,16 @@ class PostageArea extends DataObject
     private static $has_one = array(
         "Site"          => "SiteConfig"
     );
-    
+
     private static $casting = array(
         "Total"          => "Currency"
     );
 
     /**
      * Get the total cost including tax
-     * 
+     *
      * @param int $decimal_size Should we round this number to a
-     *             specific size? If set will round the output. 
+     *             specific size? If set will round the output.
      * @return Float
      */
     public function Total($decimal_size = null)
@@ -39,11 +39,11 @@ class PostageArea extends DataObject
         } else {
             $cost = $this->Cost;
         }
-        
+
         if($decimal_size) {
             $cost = number_format($cost, $decimal_size);
         }
-        
+
         return $cost;
     }
 
@@ -53,17 +53,17 @@ class PostageArea extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
-    
+
     public function canCreate($member = null)
     {
         $extended = $this->extendedCan('canCreate', $member);
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 
@@ -73,7 +73,7 @@ class PostageArea extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 
@@ -83,7 +83,7 @@ class PostageArea extends DataObject
         if ($extended !== null) {
             return $extended;
         }
-        
+
         return true;
     }
 }

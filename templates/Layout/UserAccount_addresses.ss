@@ -3,7 +3,7 @@
 
     <div class="content-container typography checkout-account unit-75 unit size3of4 lastUnit col-xs-12 col-md-8">
         $SessionMessage
-        
+
         <h1><%t Checkout.YourAddresses "Your Addresses" %></h1>
 
         <% with $CurrentMember %>

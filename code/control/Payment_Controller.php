@@ -12,14 +12,14 @@ class Payment_Controller extends Controller
 
     /**
      * URL Used to generate links to this controller.
-     * 
-     * NOTE If you alter routes.yml, you MUST alter this. 
-     * 
+     *
+     * NOTE If you alter routes.yml, you MUST alter this.
+     *
      * @var string
      * @config
      */
     private static $url_segment = "checkout/payment";
-    
+
     /**
      * Name of the current controller. Mostly used in templates for
      * targeted styling.
@@ -28,7 +28,7 @@ class Payment_Controller extends Controller
      * @config
      */
     private static $class_name = "Checkout";
-    
+
 
     private static $allowed_actions = array(
         "index",
@@ -45,10 +45,10 @@ class Payment_Controller extends Controller
     private static $url_handlers = array(
         '$Action/$ID' => 'handleAction',
     );
-    
+
     /**
      * Name of the payment handler we are using
-     * 
+     *
      * @var string
      */
     protected $payment_handler;
@@ -66,7 +66,7 @@ class Payment_Controller extends Controller
 
     /**
      * Name of the payment method we are using
-     * 
+     *
      * @var string
      */
     protected $payment_method;
@@ -81,26 +81,26 @@ class Payment_Controller extends Controller
         $this->payment_method = $method;
         return $this;
     }
-    
+
     public function getClassName()
     {
         return self::config()->class_name;
     }
-    
+
     /**
      * Shortcut to checkout config, to allow us to access it via
      * templates
-     * 
+     *
      * @return boolean
      */
     public function ShowTax()
     {
         return Checkout::config()->show_tax;
     }
-        
+
     /**
      * Get the link to this controller
-     * 
+     *
      * @return string
      */
     public function Link($action = null)
@@ -116,7 +116,7 @@ class Payment_Controller extends Controller
     {
         parent::init();
 
-        // Check if payment ID set and corresponds 
+        // Check if payment ID set and corresponds
         if ($this->request->param('ID') && $method = PaymentMethod::get()->byID($this->request->param('ID'))) {
             $this->payment_method = $method;
         }
@@ -134,7 +134,7 @@ class Payment_Controller extends Controller
             $this->payment_handler->setPaymentGateway($this->getPaymentMethod());
         }
     }
-    
+
 
     /**
      * Action that gets called before we interface with our payment
@@ -162,27 +162,27 @@ class Payment_Controller extends Controller
         // Get billing and delivery details and merge into an array
         $billing_data = Session::get("Checkout.BillingDetailsForm.data");
         $delivery_data = Session::get("Checkout.DeliveryDetailsForm.data");
-        
-        // If we have applied free shipping, set that up, else get 
+
+        // If we have applied free shipping, set that up, else get
         if (Session::get('Checkout.PostageID') == -1) {
             $postage = Checkout::CreateFreePostageObject();
         } else {
             $postage = PostageArea::get()->byID(Session::get('Checkout.PostageID'));
         }
-        
+
         // If we are using a complex checkout and do not have correct
-        // details redirect 
+        // details redirect
         if (!Checkout::config()->simple_checkout && !$cart->isCollection() && (!$postage || !$billing_data || !$delivery_data)) {
             return $this->redirect(Checkout_Controller::create()->Link());
         }
-            
+
         if ($cart->isCollection() && (!$billing_data)) {
             return $this->redirect(Checkout_Controller::create()->Link());
         }
 
         // Create an order number
         $data["OrderNumber"] = substr(chunk_split(Checkout::getRandomNumber(), 4, '-'), 0, -1);
-        
+
         // Setup holder for Payment ID
         $data["PaymentID"] = 0;
 
@@ -194,37 +194,37 @@ class Payment_Controller extends Controller
             $data = array_merge($data, $billing_data);
             $data = (is_array($delivery_data)) ? array_merge($data, $delivery_data) : $data;
             $checkout_data = Checkout::config()->checkout_data;
-            
+
             if (!$cart->isCollection()) {
                 $data['PostageType'] = $postage->Title;
                 $data['PostageCost'] = $postage->Cost;
                 $data['PostageTax'] = ($postage->Tax) ? ($postage->Cost / 100) * $postage->Tax : 0;
             }
-            
+
             if ($cart->getDiscount()) {
                 $data['Discount'] = $cart->getDiscount()->Title;
                 $data['DiscountAmount'] = $cart->DiscountAmount;
             }
-            
+
             // Add full country names if needed
             if (in_array("CountryFull", $checkout_data)) {
                 $data['CountryFull'] = Checkout::country_name_from_code($data["Country"]);
             }
-            
+
             if (in_array("DeliveryCountryFull", $checkout_data) && array_key_exists("DeliveryCountry", $data)) {
                 $data['DeliveryCountryFull'] = Checkout::country_name_from_code($data["DeliveryCountry"]);
             }
-            
+
             foreach ($checkout_data as $key) {
                 if (array_key_exists($key, $data)) {
                     $payment_data[$key] = $data[$key];
                 }
             }
         }
-        
+
         // Set our order data as a generic object
         $handler->setOrderData(ArrayData::array_to_object($payment_data));
-        
+
         return $handler->handleRequest($request, $this->model);
     }
 
@@ -232,10 +232,10 @@ class Payment_Controller extends Controller
     /**
      * This method can be called by a payment gateway to provide
      * automated integration.
-     * 
+     *
      * This action performs some basic setup then hands control directly
      * to the payment handler's "callback" action.
-     * 
+     *
      * @param $request Current Request Object
      */
     public function callback($request)
@@ -250,7 +250,7 @@ class Payment_Controller extends Controller
                 'error'
             ));
         }
-        
+
         // Hand the request over to the payment handler
         return $this
             ->payment_handler
@@ -273,9 +273,9 @@ class Payment_Controller extends Controller
         } else {
             $return = $this->success_data();
         }
-            
+
         $this->customise($return);
-        
+
         // Extend our completion process, to allow for custom completion
         // templates
         $this->extend("onBeforeComplete");

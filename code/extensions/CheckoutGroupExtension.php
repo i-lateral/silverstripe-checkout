@@ -2,7 +2,7 @@
 
 /**
  * Overwrite group object
- * 
+ *
  * @author i-lateral (http://www.i-lateral.com)
  * @package checkout
  */

@@ -8,7 +8,7 @@ class PayPalHandler extends PaymentHandler
     public function index($request)
     {
         $this->extend('onBeforeIndex');
-        
+
         $site = SiteConfig::current_site_config();
         $order = $this->getOrderData();
         $cart = ShoppingCart::get();
@@ -76,7 +76,7 @@ class PayPalHandler extends PaymentHandler
             HiddenField::create('notify_url', null, $callback_url),
             HiddenField::create('cancel_return', null, $error_url)
         );
-        
+
         if (!Checkout::config()->simple_checkout && !$cart->isCollection()) {
             // Shipping Details
             $fields->add(HiddenField::create('shipping_addressee_name', null, $order->DeliveryFirstnames . " " . $order->DeliverySurname));
@@ -96,14 +96,14 @@ class PayPalHandler extends PaymentHandler
 
             $i++;
         }
-        
+
         if (!Checkout::config()->simple_checkout && !$cart->isCollection()) {
             // Add shipping as an extra product
             $fields->add(HiddenField::create('item_name_' . $i, null, $order->PostageType));
             $fields->add(HiddenField::create('amount_' . $i, null, number_format($cart->PostageCost, 2)));
             $fields->add(HiddenField::create('quantity_' . $i, null, "1"));
         }
-        
+
         // Add tax (if needed) else just total
         if ($cart->TaxCost) {
             $fields->add(HiddenField::create(
@@ -131,9 +131,9 @@ class PayPalHandler extends PaymentHandler
             "Form"      => $form,
             "Order"     => $order
         ));
-        
+
         $this->extend('onAfterIndex');
-        
+
         return $this->renderWith(array(
             "PayPal",
             "Payment",
@@ -148,7 +148,7 @@ class PayPalHandler extends PaymentHandler
     public function callback($request)
     {
         $this->extend('onBeforeCallback');
-        
+
         $data = $this->request->postVars();
         $status = "error";
         $order_id = 0;
@@ -166,14 +166,14 @@ class PayPalHandler extends PaymentHandler
             $order_id = $data['custom'];
             $paypal_request = 'cmd=_notify-validate';
             $final_response = "";
-            
+
             // If the transaction ID is set, keep it
             if (array_key_exists("txn_id", $data)) {
                 $payment_id = $data["txn_id"];
             }
-            
+
             $listener = new IpnListener();
-            
+
             if (Director::isDev()) {
                 $listener->use_sandbox = true;
             }
@@ -227,7 +227,7 @@ class PayPalHandler extends PaymentHandler
             error_log("No payment details set");
             return $this->httpError(500);
         }
-        
+
         $payment_data = ArrayData::array_to_object(array(
             "OrderID" => $order_id,
             "PaymentProvider" => "PayPal",
@@ -235,11 +235,11 @@ class PayPalHandler extends PaymentHandler
             "Status" => $status,
             "GatewayData" => $data
         ));
-        
+
         $this->setPaymentData($payment_data);
-        
+
         $this->extend('onAfterCallback');
-        
+
         return $this->httpError(200);
     }
 }
