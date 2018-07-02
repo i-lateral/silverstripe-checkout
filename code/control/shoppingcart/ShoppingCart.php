@@ -758,6 +758,21 @@ class ShoppingCart extends Controller
     }
 
     /**
+     * Method that allows us to define in templates if we should show
+     * price including tax, or excluding tax
+     * 
+     * @return boolean
+     */
+    public static function IncludesTax()
+    {
+        if (class_exists('Catalogue')) {
+            return Catalogue::config()->price_includes_tax;
+        }
+
+        return true;
+    }
+
+    /**
      * Form responsible for estimating shipping based on location and
      * postal code
      *
@@ -806,7 +821,11 @@ class ShoppingCart extends Controller
                 
                 foreach ($available_postage as $area) {
                     $area_currency = new Currency("Cost");
-                    $area_currency->setValue($area->Cost);
+                    if ($this->IncludesTax()) {
+                        $area_currency->setValue($area->Total());
+                    } else {
+                        $area_currency->setValue($area->Cost);
+                    }
                     $postage_array[$area->ID] = $area->Title . " (" . $area_currency->Nice() . ")";
                 }
 

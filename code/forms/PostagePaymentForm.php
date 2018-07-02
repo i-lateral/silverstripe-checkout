@@ -29,7 +29,11 @@ class PostagePaymentForm extends Form
             $postage_array = array();
             foreach ($postage_areas as $area) {
                 $area_currency = new Currency("Cost");
-                $area_currency->setValue($area->Cost);
+                if (ShoppingCart::IncludesTax()) {
+                    $area_currency->setValue($area->Total());
+                } else {
+                    $area_currency->setValue($area->Cost);
+                }
                 $postage_array[$area->ID] = $area->Title . " (" . $area_currency->Nice() . ")";
             }
 
