@@ -93,6 +93,7 @@ class Checkout extends ViewableData
         "Address1",
         "Address2",
         "City",
+        "State",
         "PostCode",
         "Country",
         "CountryFull",
@@ -104,6 +105,7 @@ class Checkout extends ViewableData
         "DeliveryAddress1",
         "DeliveryAddress2",
         "DeliveryCity",
+        "DeliveryState",
         "DeliveryPostCode",
         "DeliveryCountry",
         "DeliveryCountryFull",
@@ -113,6 +115,40 @@ class Checkout extends ViewableData
         "PostageType",
         "PostageCost",
         "PostageTax"
+    );
+
+    /**
+     * A list of fields in the checkout module that are mapped to
+     * omnipay allowed fields.
+     * 
+     * This map is used to send the submitted checkout data
+     * to omnipay services for payment.
+     * 
+     * NOTE: Be careful changing this as most of these keys are required
+     * 
+     * @var array
+     * @config
+     */
+    private static $omnipay_map = array(
+        "OrderNumber" => "transactionId",
+        "FirstName" => "firstName",
+        "Surname" => "lastName",
+        "Email" => "email",
+        "Company" => "company",
+        "Address1" => "billingAddress1",
+        "Address2" => "billingAddress2",
+        "City" => "billingCity",
+        "State" => "billingState",
+        "PostCode" => "billingPostcode",
+        "Country" => "billingCountry",
+        "PhoneNumber" => "billingPhone",
+        "DeliveryAddress1" => "shippingAddress1",
+        "DeliveryAddress2" => "shippingAddress2",
+        "DeliveryCity" => "shippingCity",
+        "DeliveryState" => "shippingState",
+        "DeliveryPostCode" => "shippingPostcode",
+        "DeliveryContry" => "shippingCountry",
+        "PhoneNumber" => "shippingPhone"
     );
     
     /**
@@ -190,5 +226,24 @@ class Checkout extends ViewableData
     public static function getRandomNumber($int = 1, $length = 16)
     {
         return substr(md5(time() * rand() * $int), 0, $length);
+    }
+
+    /**
+     * Rounds up a float to a specified number of decimal places
+     * (basically acts like ceil() but allows for decimal places)
+     *
+     * @param float $value Float to round up
+     * @param int $places the number of decimal places to round to
+     * @return void
+     */
+    function round_up ($value, $places = 0)
+    {
+        if ($places < 0) {
+            $places = 0;
+        }
+    
+        $mult = pow(10, $places);
+    
+        return ceil($value * $mult) / $mult;
     }
 }

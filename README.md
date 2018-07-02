@@ -1,6 +1,10 @@
 Silverstripe ShoppingCart
 =========================
 
+## DEPRECIATED NOTICE
+
+**As of version 3.0, this module has been merged into the [silverstripe-orders](https://github.com/i-lateral/silverstripe-orders) module**
+
 Provides a shopping cart interface to a Silverstripe install that allows
 users to add items to a shopping cart, enter their personal details and
 make payments.
