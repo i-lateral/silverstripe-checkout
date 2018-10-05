@@ -17,7 +17,7 @@
     "require": {
         "silverstripe/framework": ">=3.1",
         "i-lateral/silverstripe-sessionmessenger": "1.0.*",
-        "symbiote/silverstripe-gridfieldextensions": "~1.1",
+        "symbiote/silverstripe-gridfieldextensions": "^2.0",
         "overint/php-paypal-ipn": "*"
     },
     "suggest": {
