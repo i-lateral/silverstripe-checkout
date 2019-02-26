@@ -225,7 +225,23 @@ class ShippingCalculator extends Object
                 $return->remove($location);
             }
         }
+
+        // As above, we need to check for wildcards, this time for Zip Codes
+        $exact_zip = false;
         
+        // Find any zipcodes that are exactly matched 
+        foreach ($return as $location) {
+            if ($location->ZipCode != "*") {
+                $exact_zip = true;
+            }
+        }
+        
+        // If exactly matched, remove any wildcards
+        foreach ($return as $location) {
+            if ($exact_zip && $location->ZipCode == "*" && $location->ID != -1) {
+                $return->remove($location);
+            }
+        }
 
         // Now we have a list of locations, start checking for additional
         // rules an remove if not applicable.
